@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo - Réplicas del David</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #CDCAC2;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .map-container {
+            width: 90%;
+            max-width: 1200px;
+            position: relative;
+        }
+
+        .info-box {
+            position: absolute;
+            background-color: #fff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .info-box::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .city {
+            fill: #FF5733;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .city:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <!-- Mapa interactivo -->
+        <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+            <image href="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/World_map_blank_without_borders.svg/1200px-World_map_blank_without_borders.svg.png" width="1000" height="500" />
+
+            <!-- Puntos interactivos -->
+            <circle class="city" data-city="Bariloche, Argentina" cx="350" cy="380" r="10"></circle>
+            <circle class="city" data-city="CABA, Argentina" cx="370" cy="390" r="10"></circle>
+            <circle class="city" data-city="Ciudad de México, México" cx="180" cy="220" r="10"></circle>
+            <circle class="city" data-city="Abu Dabi, Emiratos Árabes" cx="700" cy="250" r="10"></circle>
+            <circle class="city" data-city="Moscú, Rusia" cx="630" cy="130" r="10"></circle>
+            <circle class="city" data-city="Copenhague, Dinamarca" cx="580" cy="110" r="10"></circle>
+            <circle class="city" data-city="Florencia, Italia" cx="550" cy="200" r="10"></circle>
+        </svg>
+
+        <!-- Caja de información -->
+        <div class="info-box" id="info-box">
+            <p><strong id="city-name"></strong></p>
+            <p id="city-description"></p>
+        </div>
+    </div>
+
+    <script>
+        const citiesInfo = {
+            "Bariloche, Argentina": "Ubicada en la Patagonia, Bariloche alberga una réplica a cielo abierto del David de Miguel Ángel.",
+            "CABA, Argentina": "En la Ciudad de Buenos Aires también se puede encontrar una réplica del David.",
+            "Ciudad de México, México": "La capital mexicana es una de las pocas ciudades con una réplica del David en el mundo.",
+            "Abu Dabi, Emiratos Árabes": "Abu Dabi alberga una de las réplicas más recientes de esta famosa escultura.",
+            "Moscú, Rusia": "En Moscú también se puede admirar una réplica del David al aire libre.",
+            "Copenhague, Dinamarca": "La capital danesa forma parte de esta selecta lista de ciudades.",
+            "Florencia, Italia": "Florencia, cuna de Miguel Ángel, es el hogar de la obra original y su réplica más icónica."
+        };
+
+        const points = document.querySelectorAll('.city');
+        const infoBox = document.getElementById('info-box');
+        const cityName = document.getElementById('city-name');
+        const cityDescription = document.getElementById('city-description');
+
+        points.forEach(point => {
+            point.addEventListener('mouseenter', (e) => {
+                const city = e.target.getAttribute('data-city');
+                cityName.textContent = city;
+                cityDescription.textContent = citiesInfo[city];
+                infoBox.style.display = 'block';
+                infoBox.style.left = `${e.pageX}px`;
+                infoBox.style.top = `${e.pageY - 70}px`;
+            });
+
+            point.addEventListener('mouseleave', () => {
+                infoBox.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
